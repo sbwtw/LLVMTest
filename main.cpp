@@ -1,22 +1,26 @@
 #include <iostream>
-#include <llvm/MC/TargetRegistry.h>
-#include <llvm/MC/MCContext.h>
-#include <llvm/MC/MCCodeEmitter.h>
-#include <llvm/MC/MCTargetOptions.h>
-#include <llvm/MC/MCInstBuilder.h>
-#include <llvm/MC/MCInstPrinter.h>
-#include <llvm/Support/TargetSelect.h>
-#include <llvm/ADT/SmallVector.h>
-#include <llvm/Target/TargetMachine.h>
+
+#include "llvm/MC/TargetRegistry.h"
+#include "llvm/MC/MCContext.h"
+#include "llvm/MC/MCCodeEmitter.h"
+#include "llvm/MC/MCTargetOptions.h"
+#include "llvm/MC/MCInstBuilder.h"
+#include "llvm/MC/MCInstPrinter.h"
+#include "llvm/MC/MCRegister.h"
+#include "llvm/MC/MCRegisterInfo.h"
+#include "llvm/Support/TargetSelect.h"
+#include "llvm/ADT/SmallVector.h"
+#include "llvm/Target/TargetMachine.h"
 
 using namespace llvm;
 using namespace std;
 
 int main()
 {
-    InitializeAllTargets();
-    InitializeAllTargetInfos();
-    InitializeAllTargetMCAs();
+  InitializeAllTargets();
+  InitializeAllTargetInfos();
+  InitializeAllTargetMCs();
+  InitializeAllTargetMCAs();
 
     // Print registered targets
     for (auto target : TargetRegistry::targets())
@@ -43,9 +47,9 @@ int main()
     auto *mcAsmInfo = target->createMCAsmInfo(*regInfo, triple, mcTargetOpt);
     auto *mcCtx = new MCContext(Triple(triple), mcAsmInfo, regInfo, subTargetInfo);
 
-    auto *mcCodeEmitter = target->createMCCodeEmitter(*instrInfo, *regInfo, *mcCtx);
+    auto *mcCodeEmitter = target->createMCCodeEmitter(*instrInfo, *mcCtx);
 
-    MCInst inst = MCInstBuilder(2279).addReg(53);
+    MCInst inst = MCInstBuilder(2440).addImm(1205);
 
     SmallVector<MCFixup, 0> fixups;
     auto buf = SmallVector<char, 1024>();

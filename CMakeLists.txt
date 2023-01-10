@@ -21,11 +21,11 @@ llvm_map_components_to_libnames(llvm_libs
         Support
         Target
 
-        X86CodeGen
-        X86AsmParser
-        X86Desc
-        X86Info
-        X86Disassembler
-        X86TargetMCA
+        AllTargetsCodeGens
+        AllTargetsAsmParsers
+        AllTargetsDescs
+        AllTargetsInfos
+        AllTargetsDisassemblers
+        AllTargetsMCAs
         )
-target_link_libraries(LLVMTest LLVM ${llvm_libs})
+target_link_libraries(LLVMTest ${llvm_libs})
