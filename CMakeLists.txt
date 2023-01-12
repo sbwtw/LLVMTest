@@ -16,17 +16,22 @@ set(CMAKE_VERBOSE_MAKEFILE ON CACHE BOOL "ON")
 #        AllTargetsDisassemblers
 #        AllTargetsMCAs
 #        )
+
 include_directories(
         ${CMAKE_SOURCE_DIR}/lib/Target/X86
 )
 
 set(LLVM_TARGET_DEFINITIONS ${CMAKE_SOURCE_DIR}/lib/Target/X86/X86.td)
-tablegen(LLVM X86.inc -print-enums -class=Register)
+tablegen(LLVM X86Registers.inc -gen-register-info)
+tablegen(LLVM X86InstrInfo.inc -gen-instr-info -instr-info-expand-mi-operand-info=0)
 
-message(${CMAKE_SOURCE_DIR})
+add_public_tablegen_target(LLVMTestTableGen)
 
-add_executable(LLVMTest
+add_llvm_example(LLVMTest
         main.cpp
+
+        DEPENDS
+        LLVMTestTableGen
         )
 llvm_map_components_to_libnames(llvm_libs
         Core

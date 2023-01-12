@@ -11,9 +11,12 @@
 #include "llvm/Support/TargetSelect.h"
 #include "llvm/ADT/SmallVector.h"
 #include "llvm/Target/TargetMachine.h"
-#include "llvm/CodeGen/TargetOpcodes.h"
 
-//#include "X86.inc"
+#define GET_REGINFO_ENUM
+#include "X86Registers.inc"
+
+#define GET_INSTRINFO_ENUM
+#include "X86InstrInfo.inc"
 
 using namespace llvm;
 using namespace std;
@@ -49,7 +52,7 @@ int main()
 
   auto *mcCodeEmitter = target->createMCCodeEmitter(*instrInfo, *mcCtx);
 
-  MCInst inst = MCInstBuilder(TargetOpcode::G_ADD).addImm(1205);
+  MCInst inst = MCInstBuilder(X86::PUSH64r).addReg(X86::RAX);
 
   SmallVector<MCFixup, 0> fixups;
   auto buf = SmallVector<char, 1024>();
