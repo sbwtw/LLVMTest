@@ -52,12 +52,15 @@ int main()
 
   auto *mcCodeEmitter = target->createMCCodeEmitter(*instrInfo, *mcCtx);
 
-  MCInst inst = MCInstBuilder(X86::PUSH64r).addReg(X86::RAX);
+  MCInst inst = MCInstBuilder(X86::ADD32rr)
+                    .addReg(X86::RAX)
+                    .addReg(X86::RDX)
+                    .addReg(X86::RDX);
 
   SmallVector<MCFixup, 0> fixups;
-  auto buf = SmallVector<char, 1024>();
-  raw_svector_ostream os(buf);
-  mcCodeEmitter->encodeInstruction(inst, os, fixups, *subTargetInfo);
+
+  SmallString<256> buf;
+  mcCodeEmitter->encodeInstruction(inst, buf, fixups, *subTargetInfo);
 
   for (auto c : buf) {
     llvm::outs() << format_hex((unsigned char)c, 4) << ' ';
